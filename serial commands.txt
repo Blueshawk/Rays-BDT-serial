@@ -1,0 +1,14 @@
+Ray's much more complicated than neccesary barn door tracker.
+
+serial comm format #LLnnn:
+S0 = stop
+SS = run sidreal 
+SL = run lunar
+SO = run solar time
+SR = high speed return
+T+ = increment speed trim for mode unit is in. 
+T- = decrement speed trim for current mode. 
+MSnnn = set max speed to nnn
+MXnnn = set max steps to nnn
+GC Get current position count
+GS Get current speedtrim value

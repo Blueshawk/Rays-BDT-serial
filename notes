@@ -1,0 +1,16 @@
+Stop = 0
+Sidereal = 1
+Lunar = 2
+sOlar = 3
+
+
+todo 
+speedUp 
+SpeedDn 
+get speed
+set speed
+
+
+set up eeprom anything
+store each speed seperately
+

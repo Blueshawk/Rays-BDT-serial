@@ -1,0 +1,28 @@
+/* Ray's much more complicated than neccesary barn door tracker.
+
+
+  Serial comm format = :LLnnn#
+  Commands:
+  S0 = stop
+  SS = run sidreal
+  SL = run lunar
+  SO = run solar time
+  SR = high speed return
+  T+ = increment speed trim for mode unit is in.
+  T- = decrement speed trim for current mode.
+  MSnnn = set max speed to nnn
+  MXnnn = set max steps to nnn
+  GC Get current position count
+  GS Get current speedtrim value
+
+  Parts list:
+   28byj-48 stepper motor
+   spur and gear from an RC car (main shaft threaded 1/4-20)
+   DRV8825 driver board
+   Arduino nano v3.0
+   12v battery
+   5in piano hinge
+   18" 1/4-20 threaded rod bent to 12" radius
+   4 safety nuts and washers
+   2- 14 inch boards hinged and drilled for bolt at 12"
+*/
