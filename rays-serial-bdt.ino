@@ -4,7 +4,7 @@
   Serial comm format = :LLnnn#
   Commands:
   S0 = stop
-  SS = run sidreal
+  SS = run sidereal
   SL = run lunar
   SO = run solar time
   SR = high speed return
