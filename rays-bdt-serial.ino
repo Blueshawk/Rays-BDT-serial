@@ -107,11 +107,13 @@ void setup() {
   digitalWrite(Enable, LOW); //disable=1 //enable motor run
   digitalWrite(slp, HIGH); //sleep=0
   digitalWrite(rst, HIGH); //rst=0
-  motor.setPinsInverted(true, false, false);
+
+  motor.setPinsInverted(false, false, false);  //(directionInvert,stepInvert,enableInvert
   motor.setMaxSpeed(1000);
 
   eoc = 0;
   idx = 0;
+
   //setup for eeprom
   currentaddr = 0;    // start at 0 if not found later
   found = false;
@@ -358,7 +360,8 @@ void processCmd(String command)
     writeNow = true;
     return;
   }
-  //:MXnnn# set max steps, too high will flop your camera.
+  /*:MXnnn# set max number of steps to take. 
+  Too high may flop your camera so use a safety nut or cap on the traverse screw as a stop.*/
   else if (!strcasecmp( mycmd, "MX")) {
     maxSteps = param;
     Serial.print (maxSteps);
@@ -371,134 +374,147 @@ void processCmd(String command)
     Serial.print ("*D0*");
     return;
   }
-
-  //parse get info commands.
-  //:GM# Get max speed
-  else if (!strcasecmp( mycmd, "GM")) {
-    Serial.print (savedata.returnSpeed);
+  //:DF# set motor direction forward
+  else if (!strcasecmp( mycmd, "DF")) {
+    motor.setPinsInverted(false, false, false);  //(directionInvert,stepInvert,enableInvert
+    Serial.print ("*FWD*");
     return;
   }
-  //:GT# Get trackmode
-  else if (!strcasecmp( mycmd, "GT")) {
-    Serial.print ("*M");
-    Serial.print (trackMode);
-    Serial.print ("*");
-    return;
-  }
-
-  //:GC# Get current position count
-  else if (!strcasecmp( mycmd, "GC")) {
-    double tmp = (motor.currentPosition());
-    Serial.print ("*D");
-    Serial.print (tmp);
-    Serial.print ("*");
-    return;
-  }
-
-  //:GS# Get current speed value in stepspersec
-  else if (!strcasecmp( mycmd, "GS")) {
-    float curSpeed = stepsPerSecond + trimSpeed;
-    Serial.print ("*S");
-    Serial.print (curSpeed);
-    Serial.print ("*");
-    return;
-  }
-  //:GX# Get Max Steps
-  else if (!strcasecmp( mycmd, "GX")) {
-    Serial.print ("*X");
-    Serial.print (maxSteps);
-    Serial.print ("*");
-    return;
-  }
-
-}
-
-void updateEeprom() {
-  // is it time to update EEPROM settings?
-  if ( writeNow == true )
-  {
-    // decide if we have waited 5s after the last change, if so, update the EEPROM
-    long currentMillis = millis();
-    if ( ((currentMillis - previousMillis) > myinterval) && (writeNow == true) )
-    {
-      // copy current settings and write the data to EEPROM
-      if (trackMode == 1) {
-        savedata.trimSidereal = trimSpeed;
-      }
-      else if (trackMode == 2) {
-        savedata.trimLunar = trimSpeed;
-      }
-      else if (trackMode == 3) {
-        savedata.trimSolar = trimSpeed;
-      }
-      savedata.validdata = 99;
-
-      savedata.maxSteps = maxSteps;
-      EEPROM_writeAnything(currentaddr, savedata);    // update values in EEPROM
-      writeNow = false;
-      previousMillis = currentMillis;    // update the timestamp
-      Serial.print("saved data");
+    //:DR# set motor direction reverse
+    else if (!strcasecmp( mycmd, "DF")) {
+      motor.setPinsInverted(true, false, false);  //(directionInvert,stepInvert,enableInvert
+      Serial.print ("*REV*");
+      return;
     }
-  }
-}
 
 
-void pollData() {
 
-  // decide if we have waited 5s after the last change, if so, update the screen
-  long curMillis = millis();
-  if ((curMillis - prevMillis) > myinterval / 5) {
-    double tmp = (motor.currentPosition() / ustep);
-    Serial.print ("*D");
-    Serial.print (tmp);
-    Serial.print ("*");
-    delay(1);
-    Serial.print ("*T");
-    Serial.print (trimSpeed);
-    Serial.print ("*");
-    delay(1);
-   /* float curSpeed = stepsPerSecond + trimSpeed;
-    Serial.print ("*S");
-    Serial.print (curSpeed);
-    Serial.print ("*");
-    delay(1);*/
-    Serial.print ("*M");
-    if (trackMode == 0) Serial.print ("Stop");
-    if (trackMode == 1) Serial.print ("Sidereal");
-    if (trackMode == 2) Serial.print ("Lunar");
-    if (trackMode == 3) Serial.print ("Solar");
-    if (trackMode == 4) Serial.print ("Rewind");
-    Serial.print ("*");
-    prevMillis = curMillis;    // update the timestamp
-  }
-}
+      /*****parse get info commands****/
 
-void loop() {
-  pollData();
-  if (writeNow == true) {
-    updateEeprom();
-  }
-  if  (trackMode == 0) { //stop
-    motor.stop();
-    digitalWrite(Enable, HIGH);
-    digitalWrite(slp, LOW);
-    return;
-  }
-  if (trackMode == 4) { //rewind
-    highSpeed(); //rewind motor
-    return;
-  }
-  if (trackMode == 3) {
-    trimSpeed = savedata.trimSolar;
-  }
-  if (trackMode == 2) {
-    trimSpeed = savedata.trimLunar;
-  }
-  if (trackMode == 1) {
-    trimSpeed = savedata.trimSidereal;
-  }
-  Tracking(); //move motor
+      //:GM# Get max speed
+      else if (!strcasecmp( mycmd, "GM")) {
+        Serial.print (savedata.returnSpeed);
+        return;
+      }
+      //:GT# Get trackmode
+      else if (!strcasecmp( mycmd, "GT")) {
+        Serial.print ("*M");
+        Serial.print (trackMode);
+        Serial.print ("*");
+        return;
+      }
 
-}// end of loop
+      //:GC# Get current position count
+      else if (!strcasecmp( mycmd, "GC")) {
+        double tmp = (motor.currentPosition());
+        Serial.print ("*D");
+        Serial.print (tmp);
+        Serial.print ("*");
+        return;
+      }
+
+      //:GS# Get current speed value in stepspersec
+      else if (!strcasecmp( mycmd, "GS")) {
+        float curSpeed = stepsPerSecond + trimSpeed;
+        Serial.print ("*S");
+        Serial.print (curSpeed);
+        Serial.print ("*");
+        return;
+      }
+      //:GX# Get Max Steps
+      else if (!strcasecmp( mycmd, "GX")) {
+        Serial.print ("*X");
+        Serial.print (maxSteps);
+        Serial.print ("*");
+        return;
+      }
+
+    }
+
+    void updateEeprom() {
+      // is it time to update EEPROM settings?
+      if ( writeNow == true )
+      {
+        // decide if we have waited 5s after the last change, if so, update the EEPROM
+        long currentMillis = millis();
+        if ( ((currentMillis - previousMillis) > myinterval) && (writeNow == true) )
+        {
+          // copy current settings and write the data to EEPROM
+          if (trackMode == 1) {
+            savedata.trimSidereal = trimSpeed;
+          }
+          else if (trackMode == 2) {
+            savedata.trimLunar = trimSpeed;
+          }
+          else if (trackMode == 3) {
+            savedata.trimSolar = trimSpeed;
+          }
+          savedata.validdata = 99;
+
+          savedata.maxSteps = maxSteps;
+          EEPROM_writeAnything(currentaddr, savedata);    // update values in EEPROM
+          writeNow = false;
+          previousMillis = currentMillis;    // update the timestamp
+          Serial.print("saved data");
+        }
+      }
+    }
 
 
+    void pollData() {
+
+      // decide if we have waited 5s after the last change, if so, update the screen
+      long curMillis = millis();
+      if ((curMillis - prevMillis) > myinterval / 5) {
+        double tmp = (motor.currentPosition() / ustep);
+        Serial.print ("*D");
+        Serial.print (tmp);
+        Serial.print ("*");
+        delay(1);
+        Serial.print ("*T");
+        Serial.print (trimSpeed);
+        Serial.print ("*");
+        delay(1);
+        /* float curSpeed = stepsPerSecond + trimSpeed;
+          Serial.print ("*S");
+          Serial.print (curSpeed);
+          Serial.print ("*");
+          delay(1);*/
+        Serial.print ("*M");
+        if (trackMode == 0) Serial.print ("Stop");
+        if (trackMode == 1) Serial.print ("Sidereal");
+        if (trackMode == 2) Serial.print ("Lunar");
+        if (trackMode == 3) Serial.print ("Solar");
+        if (trackMode == 4) Serial.print ("Rewind");
+        Serial.print ("*");
+        prevMillis = curMillis;    // update the timestamp
+      }
+    }
+
+    void loop() {
+      pollData();
+      if (writeNow == true) {
+        updateEeprom();
+      }
+      if  (trackMode == 0) { //stop
+        motor.stop();
+        digitalWrite(Enable, HIGH);
+        digitalWrite(slp, LOW);
+        return;
+      }
+      if (trackMode == 4) { //rewind
+        highSpeed(); //rewind motor
+        return;
+      }
+      if (trackMode == 3) {
+        trimSpeed = savedata.trimSolar;
+      }
+      if (trackMode == 2) {
+        trimSpeed = savedata.trimLunar;
+      }
+      if (trackMode == 1) {
+        trimSpeed = savedata.trimSidereal;
+      }
+      Tracking(); //move motor
+
+    }// end of loop
