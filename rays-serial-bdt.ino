@@ -4,7 +4,7 @@
   Serial comm format = :LLnnn#
   Commands:
   S0 = stop
-  SS = run sidereal
+  SS = run sidreal
   SL = run lunar
   SO = run solar time
   SR = high speed return
@@ -155,9 +155,10 @@ void setup() {
     savedata.trimLunar = 2;
     savedata.trimSidereal = 3;
     savedata.returnSpeed = 500;
+    savedata.trimTimelapse = -300;
     savedata.maxSteps = 50000;
     EEPROM_writeAnything(currentaddr, savedata);    // update values in EEPROM
-    
+
   }
   //print out the saved data -
   Serial.println ("BDT-Serial");
@@ -325,9 +326,33 @@ void processCmd(String command)
     Serial.print ("*M4*");
     return;
   }
+  //:TSnnn# set trimSpeed for selected mode
+  else if (!strcasecmp( mycmd, "TS")) {
 
-  //:T+#  increment trimSpeed for selected mode
-  else if (!strcasecmp( mycmd, "T+")) {
+    String str = param;
+    str = str + "";      // add end of string terminator
+    double floatparam = (double) str.toFloat();
+    trimSpeed =  floatparam;
+    if (trackMode == 4) {
+    savedata.trimTimelapse = trimSpeed;
+  }
+  if (trackMode == 3) {
+    savedata.trimSolar = trimSpeed;
+  }
+  if (trackMode == 2) {
+    savedata.trimLunar = trimSpeed;
+  }
+  if (trackMode == 1) {
+    savedata.trimSidereal = trimSpeed;
+  }
+  Serial.print ("*T");
+  Serial.print (trimSpeed);
+  Serial.print ("*");
+  writeNow = true;
+}
+
+//:T+#  increment trimSpeed for selected mode
+else if (!strcasecmp( mycmd, "T+")) {
     trimSpeed++;
     if (trackMode == 4) {
       savedata.trimTimelapse = trimSpeed;
@@ -344,7 +369,6 @@ void processCmd(String command)
     Serial.print ("*T");
     Serial.print (trimSpeed);
     Serial.print ("*");
-
     writeNow = true;
     return;
   }
@@ -367,6 +391,7 @@ void processCmd(String command)
     Serial.print ("*T");
     Serial.print (trimSpeed);
     Serial.print ("*");
+    writeNow = true;
     return;
   }
 
@@ -502,6 +527,7 @@ void pollData() {
     if (trackMode == 1) Serial.print ("Sidereal");
     if (trackMode == 2) Serial.print ("Lunar");
     if (trackMode == 3) Serial.print ("Solar");
+    if (trackMode == 4) Serial.print ("Timelapse");
     if (trackMode == 5) Serial.print ("Rewind");
     Serial.print ("*");
     prevMillis = curMillis;    // update the timestamp
@@ -519,10 +545,14 @@ void loop() {
     digitalWrite(slp, LOW);
     return;
   }
-  if (trackMode == 4) { //rewind
+  if (trackMode == 5) { //rewind
     highSpeed(); //rewind motor
     return;
   }
+  if (trackMode == 4) {
+    trimSpeed = savedata.trimTimelapse;
+  }
+
   if (trackMode == 3) {
     trimSpeed = savedata.trimSolar;
   }
