@@ -37,15 +37,15 @@
 
 #define EEPROMSIZE 1024               // ATMEGA328P 1024 EEPROM
 
-//using a pin header between the nano and DRV8825 on the digital I/o side.
+//If using a pin header between the nano and DRV8825 on the digital I/o side.
 //Be careful to get it installed the right way.
 //DRV8825 pins
 #define Dir     5       // direction
 #define Step    6      // step 
 #define slp     7      // set high to run
 #define rst     8       // set high to run
-#define M2      9       // microstepping lines
-#define M1      10       // microstepping lines
+#define M2      9 //9      // microstepping lines
+#define M1      10   //10    // microstepping lines
 #define M0      11      // microstepping lines
 #define Enable  12       //set low to run
 
@@ -54,7 +54,7 @@ static AccelStepper motor(AccelStepper::DRIVER, Step, Dir);
 
 //Global variables
 int trackMode = 0;
-int ustep = 16; //microstep mode multiplier
+int ustep = 2; //microstep mode multiplier
 long int maxSteps = 41690 * ustep;   // 50degrees --number of steps that equals max safe angle or rod.
 float stepsPerSecond = 208.5 * ustep; //  3.475   208.5  ; //basic drive speed 3rpm on motor stud = 1rpm at screw
 char inChar; //serial port characters
@@ -397,7 +397,10 @@ else if (!strcasecmp( mycmd, "T+")) {
 
   //:MSxxx# set max speed param = xxx
   else if (!strcasecmp( mycmd, "MS")) {
-    savedata.returnSpeed = param;
+    String str = param;
+    str = str + "";      // add end of string terminator
+    double maxspd = (double) str.toFloat();
+    savedata.returnSpeed = maxspd;
     Serial.print (savedata.returnSpeed);
     writeNow = true;
     return;
