@@ -1,10 +1,10 @@
- This started out as yet another motorized barn door sky tracker. After finding the code way overcomplicated on units 
+  This started out as yet another motorized barn door sky tracker. After finding the code way overcomplicated on units 
  I found online I decided to make a simpler one for myself. Then I started adding serial commands and then a bluetooth unit.
  Finally I used a bluetooth serial phone app to make a mobile console for it. - (I'll try to find a way to share that too).
  
   Realizing its potential for general time lapse panning use, this unit now has better speed and direction controls.
  The basic barn door sky tracking functions will remain.
-
+```
   Serial comm format = :LLnnn# commands can come from usb or bluetooth module if installed.
   Commands:
   S0 = stop
@@ -17,11 +17,12 @@
   T- = decrement speed trim for current mode.
   MSnnn = set max speed to nnn --this is also the run speed in timelapse mode 
   MXnnn = set max steps to nnn
-  GC Get current position count
-  GS Get current speedtrim value
-  MF Motor direction forward
-  MR Motor direction reverse
-
+  MR = Reset count to 0
+  DF = Motor direction forward
+  DR = Motor direction reverse
+  GC = Get current position count
+  GS = Get current speedtrim value
+  
   Parts list:
    28byj-48 stepper motor-  belt pulley attached 
    motor spur and gear from an RC car, or large and small gt2 belt and pulleys with the big gear 
@@ -33,3 +34,4 @@
    5in piano hinge
       4 safety nuts and washers
    2- 14 inch boards hinged and drilled for bolt at 12"
+```
