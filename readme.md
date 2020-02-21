@@ -1,5 +1,9 @@
- This started out as yet another motorized barn door sky tracker. After finding the code way overcomplicated on units I found online I decided to make a simpler one for myself. Then I started adding serial commands and then a bluetooth unit. Finally I used a bluetooth serial phone app to make a mobile console for it. - (I'll try to find a way to share that too).
- Realizing its potential for general time lapse panning use, this unit now has better speed and direction controls. The basic barn door sky tracking functions will remain.
+ This started out as yet another motorized barn door sky tracker. After finding the code way overcomplicated on units 
+ I found online I decided to make a simpler one for myself. Then I started adding serial commands and then a bluetooth unit.
+ Finally I used a bluetooth serial phone app to make a mobile console for it. - (I'll try to find a way to share that too).
+ 
+  Realizing its potential for general time lapse panning use, this unit now has better speed and direction controls.
+ The basic barn door sky tracking functions will remain.
 
   Serial comm format = :LLnnn# commands can come from usb or bluetooth module if installed.
   Commands:
@@ -20,7 +24,8 @@
 
   Parts list:
    28byj-48 stepper motor-  belt pulley attached 
-   motor spur and gear from an RC car, or large and small gt2 belt and pulleys with the big gear(or pulley shaft hole threaded 1/4-20) 
+   motor spur and gear from an RC car, or large and small gt2 belt and pulleys with the big gear 
+   or pulley shaft hole threaded 1/4-20) 
    18" 1/4-20 threaded rod bent to 12" radius 
    DRV8825 driver board or other stepper controller
    Arduino nano v3.0
