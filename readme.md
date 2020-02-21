@@ -1,9 +1,11 @@
   This started out as yet another motorized barn door sky tracker. After finding the code way overcomplicated on units 
  I found online I decided to make a simpler one for myself. Then I started adding serial commands and then a bluetooth unit.
  Finally I used a bluetooth serial phone app to make a mobile console for it. - (I'll try to find a way to share that too).
- 
+  Trim speeds for each trackmode are stored automatically whenever they are changed. 
+
   Realizing its potential for general time lapse panning use, this unit now has better speed and direction controls.
  The basic barn door sky tracking functions will remain.
+
 ```
   Serial comm format = :LLnnn# commands can come from usb or bluetooth module if installed.
   Commands:
@@ -11,11 +13,11 @@
   SS = run sidreal
   SL = run lunar
   SO = run solar time
-  ST = time lapse mode
+  ST = run time lapse
   SR = high speed return
   T+ = increment speed trim for mode unit is in. This is stored in eprom.
   T- = decrement speed trim for current mode.
-  MSnnn = set max speed to nnn --this is also the run speed in timelapse mode 
+  MSnnn = set rewind/max speed to nnn 
   MXnnn = set max steps to nnn
   MR = Reset count to 0
   DF = Motor direction forward
