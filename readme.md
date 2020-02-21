@@ -17,6 +17,7 @@
   SR = high speed return
   T+ = increment speed trim for mode unit is in. This is stored in eprom.
   T- = decrement speed trim for current mode.
+  TSnnn = enter a number to set trim speed for current mode
   MSnnn = set rewind/max speed to nnn 
   MXnnn = set max steps to nnn
   MR = Reset count to 0
