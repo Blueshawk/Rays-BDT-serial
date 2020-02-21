@@ -1,6 +1,6 @@
   This started out as yet another motorized barn door sky tracker. After finding the code way overcomplicated on units 
  I found online I decided to make a simpler one for myself. Then I started adding serial commands and then a bluetooth unit.
- Finally I used a bluetooth serial phone app to make a mobile console for it. - (I'll try to find a way to share that too).
+ Finally I used a bluetooth serial phone app to make a mobile console for it. The android app is called "Bluetooth electronics" and will use the .kwl file if you put it in the Keuwlsoft folder in your phone.(storage/emulated/0 most likely)
   Trim speeds for each trackmode are stored automatically whenever they are changed. 
 
   Realizing its potential for general time lapse panning use, this unit now has better speed and direction controls.
