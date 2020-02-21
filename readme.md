@@ -1,24 +1,27 @@
- This started out as yet another motorized barn door sky tracker I made after finding the code way overcomplicated on units I found online. I then started adding serial commands and then a bluetooth unit. Finally I used a bluetooth serial phone app to make a mobile console for it. - I'll try to find a way to share that too. It sat on a shelf for over a year before being picked up again recently after realizing its potential for general time lapse panning use. 
+ This started out as yet another motorized barn door sky tracker. After finding the code way overcomplicated on units I found online I decided to make a simpler one for myself. Then I started adding serial commands and then a bluetooth unit. Finally I used a bluetooth serial phone app to make a mobile console for it. - (I'll try to find a way to share that too).
+ Realizing its potential for general time lapse panning use, this unit now has better speed and direction controls. The basic barn door sky tracking functions will remain.
 
-  Serial comm format = :LLnnn#
+  Serial comm format = :LLnnn# commands can come from usb or bluetooth module if installed.
   Commands:
   S0 = stop
   SS = run sidreal
   SL = run lunar
   SO = run solar time
+  ST = time lapse mode
   SR = high speed return
-  T+ = increment speed trim for mode unit is in.
+  T+ = increment speed trim for mode unit is in. This is stored in eprom.
   T- = decrement speed trim for current mode.
-  MSnnn = set max speed to nnn
+  MSnnn = set max speed to nnn --this is also the run speed in timelapse mode 
   MXnnn = set max steps to nnn
   GC Get current position count
   GS Get current speedtrim value
+  MF Motor direction forward
+  MR Motor direction reverse
 
   Parts list:
    28byj-48 stepper motor-  belt pulley attached 
-   motor spur and gear from an RC car with main gear shaft hole threaded 1/4-20
-   (I ordered gator belt pulleys, but the geared one I made my dad also works well)
-   18" 1/4-20 threaded rod bent to 12" radius
+   motor spur and gear from an RC car, or large and small gt2 belt and pulleys with the big gear(or pulley shaft hole threaded 1/4-20) 
+   18" 1/4-20 threaded rod bent to 12" radius 
    DRV8825 driver board or other stepper controller
    Arduino nano v3.0
    12v battery
